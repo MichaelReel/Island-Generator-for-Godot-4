@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="DebugColorDict" load_steps=2 format=3 uid="uid://b1jnfhw6prua2"]
+
+[ext_resource type="Script" path="res://lib/util/DebugColorDict.gd" id="1_qi68n"]
+
+[resource]
+script = ExtResource("1_qi68n")
+base_color = Color(0.0941176, 0.25098, 0.0941176, 1)
+land_color = Color(0.12549, 0.376471, 0.12549, 1)
+region_colors = PackedColorArray(0.12549, 0.376471, 0.12549, 1, 0.12549, 0.376471, 0.12549, 1, 0.12549, 0.376471, 0.12549, 1, 0.12549, 0.376471, 0.12549, 1, 0.12549, 0.376471, 0.12549, 1, 0.12549, 0.376471, 0.12549, 1)
+river_color = Color(0.12549, 0.12549, 0.752941, 1)
+head_color = null
+mouth_color = null
+lake_colors = PackedColorArray(0.12549, 0.376471, 0.12549, 1, 0.12549, 0.376471, 0.12549, 1, 0.12549, 0.376471, 0.12549, 1)
+settlement_color = Color(0.25098, 0.25098, 0.25098, 1)
+road_cell_color = Color(0.12549, 0.376471, 0.12549, 1)
+road_color = Color(0.188235, 0.313726, 0.188235, 1)
+junction_marker_color = Color(0.25098, 0.188235, 0.12549, 1)
+cliff_color = Color(0.690196, 0.752941, 0.690196, 1)
+special_debug_color = Color(0.752941, 0.12549, 0.752941, 1)
