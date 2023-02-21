@@ -1,0 +1,10 @@
+[gd_scene load_steps=3 format=3 uid="uid://bh5aiqjtrj2hn"]
+
+[ext_resource type="Script" path="res://view/IslandDebugMesh.gd" id="1_ynsfo"]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_pgab5"]
+size = Vector2(1000, 1000)
+
+[node name="IslandDebugMesh" type="MeshInstance3D"]
+mesh = SubResource("PlaneMesh_pgab5")
+script = ExtResource("1_ynsfo")

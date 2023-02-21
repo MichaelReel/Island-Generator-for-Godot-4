@@ -1,0 +1,22 @@
+[gd_scene load_steps=4 format=3 uid="uid://cxl6ppg12bdw5"]
+
+[ext_resource type="PackedScene" uid="uid://bh5aiqjtrj2hn" path="res://view/IslandDebugMesh.tscn" id="1_6k65b"]
+[ext_resource type="PackedScene" uid="uid://c0h7ikfpntf4l" path="res://lib/camera/DebugCameraControl.tscn" id="2_45wnh"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_abawt"]
+
+[node name="Main" type="Node3D"]
+
+[node name="IslandDebugMesh" parent="." instance=ExtResource("1_6k65b")]
+
+[node name="DebugCameraControl" parent="." instance=ExtResource("2_45wnh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.66493, 0)
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.34202, 0.939693, 0, -0.939693, 0.34202, 0, 0, 0, 1, 0, 0, 0)
+light_color = Color(0.909804, 0.870588, 0.8, 1)
+light_energy = 9.312
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.4343, -8.70886)
+mesh = SubResource("SphereMesh_abawt")
