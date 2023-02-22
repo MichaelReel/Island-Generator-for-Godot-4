@@ -10,7 +10,7 @@ var _grid_points: Array[Array] = []  # Array[Array[Vertex]]
 var _grid_lines: Array[Edge] = []
 var _grid_tris: Array[Array] = []  # Array[Array[Triangle]]
 var _cell_count: int = 0
-var _debug_content: String = ""
+#var _debug_content: String = ""
 
 func _init(edge_size: float, row_points: int, color: Color) -> void:
 	_tri_side = edge_size
@@ -58,7 +58,7 @@ func _init(edge_size: float, row_points: int, color: Color) -> void:
 		for tri in tri_row:
 			tri.update_neighbours_from_edges()
 		
-	_update_debug_content()
+#	_update_debug_content()
 
 func get_point_rows() -> Array:  # Array[Array[Vertex]]
 	"""Returns the array of rows of points"""
@@ -160,10 +160,10 @@ func _create_triangle(row: int, col: int) -> Triangle:
 func _point_is_not_sea(point: Vertex) -> bool:
 	return not point.has_polygon_with_parent(null)
 
-func _update_debug_content() -> void:
-	# Just list the last few rows
-	_debug_content = ""
-	for row in range(len(_grid_tris)-4, len(_grid_tris)):
-		for col in range(len(_grid_tris[row])-6, len(_grid_tris[row])):
-			_debug_content += str(_grid_tris[row][col]) + "\n"
-		_debug_content += "\n"
+#func _update_debug_content() -> void:
+#	# Just list the last few rows
+#	_debug_content = ""
+#	for row in range(len(_grid_tris)-4, len(_grid_tris)):
+#		for col in range(len(_grid_tris[row])-6, len(_grid_tris[row])):
+#			_debug_content += str(_grid_tris[row][col]) + "\n"
+#		_debug_content += "\n"

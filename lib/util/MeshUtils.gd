@@ -15,17 +15,16 @@ extends Object
 static func get_land_mesh(high_level_terrain: HighLevelTerrain, debug_color_dict: DebugColorDict) -> Mesh:
 	var grid = high_level_terrain.grid
 	var surface_tool: SurfaceTool = SurfaceTool.new()
-	var island_mesh: Mesh = Mesh.new()
 
 	surface_tool.begin(Mesh.PRIMITIVE_TRIANGLES)
 	for row in grid.get_triangles():
 		for triangle in row:
 			var color_dict: Dictionary = triangle.get_river_vertex_colors(debug_color_dict)
 			for vertex in triangle.get_vertices():
-				surface_tool.add_color(color_dict[vertex])
+				surface_tool.set_color(color_dict[vertex])
 				surface_tool.add_vertex(vertex.get_vector())
 	surface_tool.generate_normals()
-	var _err = surface_tool.commit(island_mesh)
+	var island_mesh: Mesh = surface_tool.commit()
 
 	return island_mesh
 

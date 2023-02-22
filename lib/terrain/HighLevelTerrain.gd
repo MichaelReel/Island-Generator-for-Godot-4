@@ -35,7 +35,10 @@ func _init(
 ) -> void:
 	var rng = RandomNumberGenerator.new()
 	rng.seed = random_seed
+	print("Starting Base Grid Gen")
+	var time_start: int = Time.get_ticks_msec()
 	grid = Grid.new(edge_length, edges_across, debug_color_map.base_color)
+	print("Grid created in %d msecs" % (Time.get_ticks_msec() - time_start))
 #	_island_stage = IslandStage.new(grid,  debug_color_map.land_color, land_cell_limit, rng.randi())
 #	_regions_stage = RegionStage.new(_island_stage.get_region(), debug_color_map.region_colors, rng.randi())
 #	_lake_stage = LakeStage.new(_regions_stage, debug_color_map.lake_colors, rng.randi())

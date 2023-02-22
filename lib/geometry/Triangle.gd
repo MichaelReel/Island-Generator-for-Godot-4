@@ -82,10 +82,10 @@ func get_edges_on_grid_boundary() -> Array[Edge]:
 			boundary_edges.append(edge)
 	return boundary_edges
 
-#func get_color():  # -> Color | null:
+func get_color():  # -> Color | null:
 #	if _parent:
 #		return _parent.get_color()
-#	return null
+	return null
 
 func get_vertices() -> Array[Vertex]:
 	return _points
@@ -113,7 +113,7 @@ func get_river_vertex_colors(debug_color_dict: DebugColorDict) -> Dictionary:  #
 #	# 	return point_color_dict
 
 	for point in _points:
-#		point_color_dict[point] = get_color()
+		point_color_dict[point] = get_color()
 		if point_color_dict[point] == null:
 			point_color_dict[point] = null_color
 #		if point.has_river():

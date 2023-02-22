@@ -57,7 +57,7 @@ func _stage_thread() -> void:
 func _on_stage_complete(stage: Stage, duration: int) -> void:
 	print("%s completed in %d msecs" % [stage, duration])
 	var time_start = Time.get_ticks_msec()
-#	_update_land_terrain_mesh()
+	_update_land_terrain_mesh()
 #	match str(stage):
 #		"River Stage":
 #			_create_water_mesh_instances(_water_material)
