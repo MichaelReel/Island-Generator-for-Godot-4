@@ -40,22 +40,19 @@ func _ready() -> void:
 	)
 	var _err1 = high_level_terrain.connect("all_stages_complete", _on_all_stages_complete)
 	var _err2 = high_level_terrain.connect("stage_complete", _on_stage_complete)
-#	if stages_in_thread:
-#		thread = Thread.new()
-#		var _err = thread.start(self, "_stage_thread")
-#	else:
-#		_stage_thread()
-#
-#func _exit_tree():
-#	if stages_in_thread:
-#		thread.wait_to_finish()
-#
-#func _stage_thread() -> void:
-#	var island_mesh: Mesh = MeshUtils.get_land_mesh(high_level_terrain, debug_color_dict)
-#	set_mesh(island_mesh)
-#	high_level_terrain.perform()
-#
-#	_update_pin_cursor_display()
+	if stages_in_thread:
+		thread = Thread.new()
+		var _err = thread.start(_stage_thread)
+	else:
+		_stage_thread()
+
+func _exit_tree():
+	if stages_in_thread:
+		thread.wait_to_finish()
+
+func _stage_thread() -> void:
+	_update_land_terrain_mesh()
+	high_level_terrain.perform()
 
 func _on_stage_complete(stage: Stage, duration: int) -> void:
 	print("%s completed in %d msecs" % [stage, duration])
@@ -75,10 +72,10 @@ func _on_stage_complete(stage: Stage, duration: int) -> void:
 func _on_all_stages_complete() -> void:
 	print("High Level Terrain stages complete")
 
-#func _update_land_terrain_mesh() -> void:
-#	var island_mesh: Mesh = MeshUtils.get_land_mesh(high_level_terrain, debug_color_dict)
-#	set_mesh(island_mesh)
-#
+func _update_land_terrain_mesh() -> void:
+	var island_mesh: Mesh = MeshUtils.get_land_mesh(high_level_terrain, debug_color_dict)
+	set_mesh(island_mesh)
+
 #func _create_water_mesh_instances(water_material: Material) -> void:
 #	_insert_meshes(MeshUtils.get_water_body_meshes(high_level_terrain), water_material)
 #

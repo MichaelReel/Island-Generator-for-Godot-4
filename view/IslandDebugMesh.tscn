@@ -1,6 +1,5 @@
-[gd_scene load_steps=4 format=3 uid="uid://bh5aiqjtrj2hn"]
+[gd_scene load_steps=3 format=3 uid="uid://bh5aiqjtrj2hn"]
 
-[ext_resource type="Material" uid="uid://cj2ghxula37y0" path="res://materials/debug_terrain_surface.tres" id="1_ope23"]
 [ext_resource type="Script" path="res://view/IslandDebugMesh.gd" id="1_ynsfo"]
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_pgab5"]
@@ -8,5 +7,4 @@ size = Vector2(1000, 1000)
 
 [node name="IslandDebugMesh" type="MeshInstance3D"]
 mesh = SubResource("PlaneMesh_pgab5")
-surface_material_override/0 = ExtResource("1_ope23")
 script = ExtResource("1_ynsfo")

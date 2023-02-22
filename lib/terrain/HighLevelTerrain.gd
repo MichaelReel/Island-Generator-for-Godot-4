@@ -10,7 +10,7 @@ signal stage_complete(stage, duration)
 signal all_stages_complete()
 
 
-#var grid: Grid
+var grid: Grid
 #var _island_stage: IslandStage
 #var _regions_stage: RegionStage
 #var _lake_stage: LakeStage
@@ -35,7 +35,7 @@ func _init(
 ) -> void:
 	var rng = RandomNumberGenerator.new()
 	rng.seed = random_seed
-#	grid = Grid.new(edge_length, edges_across, debug_color_map.base_color)
+	grid = Grid.new(edge_length, edges_across, debug_color_map.base_color)
 #	_island_stage = IslandStage.new(grid,  debug_color_map.land_color, land_cell_limit, rng.randi())
 #	_regions_stage = RegionStage.new(_island_stage.get_region(), debug_color_map.region_colors, rng.randi())
 #	_lake_stage = LakeStage.new(_regions_stage, debug_color_map.lake_colors, rng.randi())
