@@ -7,7 +7,6 @@ extends CharacterBody3D
 @export var deceleration: float = 16
 @export var max_slope_angle: float = 89
 
-@onready var camera_control: CharacterBody3D = self
 @onready var camera_holder: Node3D = $CameraMount
 @onready var camera: Camera3D = $CameraMount/Camera3D
 @onready var cam_ref: WeakRef = weakref(camera)
@@ -33,7 +32,7 @@ func _input(event : InputEvent) -> void:
 		camera_holder.rotate_x(deg_to_rad(ev.relative.y * mouse_sensitivity * -1))
 		
 		# Rotate cameras on the Y plane given changes to the X mouse position (Horizontal)
-		camera_control.rotate_y(deg_to_rad(ev.relative.x * mouse_sensitivity * -1))
+		rotate_y(deg_to_rad(ev.relative.x * mouse_sensitivity * -1))
 	
 		# Clamp the vertical look to +- 70 because we don't do back flips or tumbles
 		var camera_rot: Vector3 = camera_holder.rotation_degrees

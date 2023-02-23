@@ -1,13 +1,9 @@
-[gd_scene load_steps=6 format=3 uid="uid://cxl6ppg12bdw5"]
+[gd_scene load_steps=5 format=3 uid="uid://cxl6ppg12bdw5"]
 
 [ext_resource type="PackedScene" uid="uid://bh5aiqjtrj2hn" path="res://view/IslandDebugMesh.tscn" id="1_6k65b"]
 [ext_resource type="PackedScene" uid="uid://c0h7ikfpntf4l" path="res://lib/camera/DebugCameraControl.tscn" id="2_45wnh"]
 [ext_resource type="Resource" uid="uid://b1jnfhw6prua2" path="res://lib/util/debug_color_dict.tres" id="2_dh10k"]
 [ext_resource type="Material" uid="uid://cj2ghxula37y0" path="res://materials/debug_terrain_surface.tres" id="2_lml5o"]
-
-[sub_resource type="TorusMesh" id="TorusMesh_mr114"]
-inner_radius = 40.0
-outer_radius = 50.0
 
 [node name="Main" type="Node3D"]
 
@@ -17,11 +13,12 @@ stages_in_thread = false
 debug_color_dict = ExtResource("2_dh10k")
 
 [node name="DebugCameraControl" parent="." instance=ExtResource("2_45wnh")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.66493, 0)
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 600, 600, 0)
+
+[node name="CameraMount" parent="DebugCameraControl" index="1"]
+transform = Transform3D(1, 0, 0, 0, 0.573576, 0.819152, 0, -0.819152, 0.573576, 0, 0, 0)
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
-light_color = Color(0.909804, 0.870588, 0.8, 1)
-light_angular_distance = 66.62
+transform = Transform3D(-4.37114e-08, 0.866025, -0.5, 0, 0.5, 0.866025, 1, 3.78552e-08, -2.18557e-08, 0, 12.1593, 0)
 
-[node name="DebugMeshInstance3D" type="MeshInstance3D" parent="."]
-mesh = SubResource("TorusMesh_mr114")
+[editable path="DebugCameraControl"]

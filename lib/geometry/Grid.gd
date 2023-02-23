@@ -16,11 +16,18 @@ func _init(edge_size: float, row_points: int, color: Color) -> void:
 	_tri_side = edge_size
 	_color = color
 	_tri_height = sqrt(0.75) * _tri_side
+	
+	print("Preparing dimensions... %d" % Time.get_ticks_msec())
+	
 	# Find the number of rows to keep the mesh roughly square
 	var row_width: float = (row_points + 0.5) * _tri_side
 	var row_count: int = int(row_width / _tri_height)
 	var half_full_width: float = edge_size * row_points / 2.0
 	_mesh_center = Vector2(half_full_width, half_full_width)
+	var tri_rows: int = row_count - 1
+	var tri_per_row: int = (row_points - 1) * 2
+	
+	print("Preparing points... %d" % Time.get_ticks_msec())
 	
 	# Lay out points
 	for row_ind in range(row_count):
@@ -32,6 +39,8 @@ func _init(edge_size: float, row_points: int, color: Color) -> void:
 			var new_point = Vertex.new(x - _mesh_center.x, z - _mesh_center.y)
 			point_row.append(new_point)
 		_grid_points.append(point_row)
+	
+	print("Preparing lines... %d" % Time.get_ticks_msec())
 	
 	# Layout and record edges between points
 	for row_ind in range(row_count):
@@ -45,18 +54,25 @@ func _init(edge_size: float, row_points: int, color: Color) -> void:
 			if row_ind > 0 and col_ind + parity >= 0 and col_ind + parity < len(_grid_points[row_ind - 1]):
 				_add_grid_line(point, _grid_points[row_ind - 1][col_ind + parity])
 	
+
+	print("Preparing triangles... %d" % Time.get_ticks_msec())
+	
 	# Go through the points and create triangles
-	for tri_row_ind in range(row_count - 1):
+	for tri_row_ind in range(tri_rows):
 		var tri_row: Array = []
-		for tri_col_ind in range((row_points - 1) * 2):
+		for tri_col_ind in range(tri_per_row):
 			var new_triangle: Triangle = _create_triangle(tri_row_ind, tri_col_ind)
 			tri_row.append(new_triangle)
 		_grid_tris.append(tri_row)
+	
+	print("Updating triangles... %d" % Time.get_ticks_msec())
 	
 	# Catalogue the neighbours to each triangle
 	for tri_row in _grid_tris:
 		for tri in tri_row:
 			tri.update_neighbours_from_edges()
+	
+	print("Grid initialised! %d" % Time.get_ticks_msec())
 		
 #	_update_debug_content()
 
