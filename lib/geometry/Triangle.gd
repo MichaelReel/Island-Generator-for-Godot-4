@@ -8,14 +8,6 @@ var _index_col: int
 var _edges: Array[Edge]
 var _neighbours: Array[Triangle] = []
 var _corner_neighbours: Array[Triangle] = []
-#var _parent: Object = null
-#var _is_potential_settlement: bool = false
-#var _roads: Array = []  # Array[TrianglePath]
-#var _junction: bool = false
-#var _cliff_edge: Object = null  # Edge | null
-#var _cliff_point: Object = null  # Vertex | null
-#var _special_debug_edge: Object = null  # Edge | null
-#var _special_debug_point: Object = null  # Vertex | null
 
 func _init(points: Array[Vertex], index_col: int = -1, index_row: int = -1) -> void:
 	_points = points
@@ -41,37 +33,6 @@ func update_neighbours_from_edges() -> void:
 			if not tri in _neighbours and not tri in _corner_neighbours and not tri == self:
 				_corner_neighbours.append(tri)
 
-#func get_neighbours_with_parent(parent: Object) -> Array[Triangle]:  # (parent: Region | null)
-#	var parented_neighbours: Array[Triangle] = []
-#	for neighbour in _neighbours:
-#		if neighbour.get_parent() == parent:
-#			parented_neighbours.append(neighbour)
-#	return parented_neighbours
-#
-#func count_neighbours_with_parent(parent: Object) -> int:  # (parent: Region | null)
-#	return get_neighbours_with_parent(parent).size()
-#
-#func get_corner_neighbours_with_parent(parent: Object) -> Array[Triangle]:  # (parent: Region | null)
-#	var parented_corner_neighbours: Array[Triangle] = []
-#	for corner_neighbour in _corner_neighbours:
-#		if corner_neighbour.get_parent() == parent:
-#			parented_corner_neighbours.append(corner_neighbour)
-#	return parented_corner_neighbours
-#
-#func count_corner_neighbours_with_parent(parent: Object) -> int:  # (parent: Region | null)
-#	return get_corner_neighbours_with_parent(parent).size()
-#
-#func get_neighbour_borders_with_parent(parent: Object) -> Array[Edge]:  # (parent: Region | null)
-#	var borders : Array[Edge] = []
-#	for edge in _edges:
-#		for tri in edge.get_bordering_triangles():
-#			if tri != self and tri.get_parent() == parent:
-#				borders.append(edge)
-#	return borders
-#
-#func set_parent(parent: Object) -> void:  # (parent: Region | null)
-#	_parent = parent
-
 func is_on_grid_boundary() -> bool:
 	return len(_neighbours) < len(_edges)
 
@@ -81,11 +42,6 @@ func get_edges_on_grid_boundary() -> Array[Edge]:
 		if len(edge.get_bordering_triangles()) == 1:
 			boundary_edges.append(edge)
 	return boundary_edges
-
-func get_color(default_color: Color):  # -> Color | null:
-#	if _parent:
-#		return _parent.get_color()
-	return default_color
 
 func get_vertices() -> Array[Vertex]:
 	return _points
@@ -113,7 +69,7 @@ func get_debug_vertex_colors(debug_color_dict: DebugColorDict) -> Dictionary:  #
 #	# 	return point_color_dict
 
 	for point in _points:
-		point_color_dict[point] = get_color(null_color)
+		point_color_dict[point] = get_parent_color(null_color)
 #		if point.has_river():
 #			point_color_dict[point] = river_color
 #		if point.is_head():
@@ -146,17 +102,8 @@ func get_shared_edge(triangle: Triangle) -> Object:  # -> Edge | null
 			return edge
 	return null
 
-#func get_parent() -> Object:  # -> Region | null
-#	return _parent
-
 func get_neighbours() -> Array[Triangle]:  # -> Array[Triangle]
 	return _neighbours
-
-#func is_surrounded_by_region(region: Object) -> bool:  # (region: Region | null)
-#	for point in _points:
-#		if not point.has_polygon_with_parent(region):
-#			return false
-#	return true
 
 func get_center() -> Vector3:
 	# Can't remember which center this is, but being equalateral means it doesnt matter much
@@ -190,36 +137,9 @@ func get_lowest_edge() -> Edge:
 	points.sort_custom(sort_height) # BUG: Should use Vertex.sort_height
 	return points[0].get_connection_to_point(points[1])
 
-# Copied from Vertex to get around bug
+# Copied from Vertex to get around bug, for now or until I figure the real issue
 static func sort_height(a: Vertex, b: Vertex) -> bool:
 	return a.get_height() <= b.get_height()
-
-#func set_potential_settlement() -> void:
-#	_is_potential_settlement = true
-#
-#func add_road(road: Object) -> void:  # (road: TrianglePath)
-#	_roads.append(road)
-#
-#func set_junction() -> void:
-#	_junction = true
-#
-#func is_junction() -> bool:
-#	return _junction
-#
-#func contains_road() -> bool:
-#	return len(_roads) == 0
-#
-#func road_crossing() -> bool:
-#	return len(_roads) > 1
-#
-#func get_road() -> Array:  # -> Array[TrianglePath]
-#	return _roads
-#
-#func is_junction_or_settlement() -> bool:
-#	return _junction or _is_potential_settlement
-#
-#func remove_road(road: Object) -> void:  # (road: TrianglePath)
-#	_roads.erase(road)
 
 func order_clockwise(edge_1: Edge, edge_2: Edge) -> Array[Edge]:
 	"""Assuming the given edges are in this triangle, return them in clockwise order"""
@@ -230,18 +150,6 @@ func order_clockwise(edge_1: Edge, edge_2: Edge) -> Array[Edge]:
 			return [edge_2, edge_1]
 	printerr("One or more edges not in this triangle")
 	return []
-	
-#func set_cliff_edge(edge: Object) -> void:  # (edge: Edge | null)
-#	_cliff_edge = edge
-#
-#func set_cliff_point(point: Object) -> void:  # (point: Vertex | null)
-#	_cliff_point = point
-
-#func touches_river() -> bool:
-#	for point in _points:
-#		if point.has_river():
-#			return true
-#	return false
 
 func points_in_draw_order(a: Vertex, b: Vertex) -> bool:
 	var a_ind = _points.find(a)
@@ -286,8 +194,110 @@ func replace_existing_point_with(existing: Vertex, replacement: Vertex) -> void:
 	existing.remove_polygon(self)
 	replacement.add_polygon(self)
 
+
+# ~~~~~~~~~~~~~~~
+# Region Data:
+# ~~~~~~~~~~~~~~~
+
+var _parent: Object = null
+
+func get_parent() -> Object:  # -> Region | null
+	return _parent
+
+func set_parent(parent: Object) -> void:  # (parent: Region | null)
+	_parent = parent
+
+func get_parent_color(default_color: Color) -> Color:
+	if _parent:
+		return _parent.get_color()
+	return default_color
+
+func get_neighbour_borders_with_parent(parent: Object) -> Array[Edge]:  # (parent: Region | null)
+	var borders : Array[Edge] = []
+	for edge in _edges:
+		for tri in edge.get_bordering_triangles():
+			if tri != self and tri.get_parent() == parent:
+				borders.append(edge)
+	return borders
+
+func get_neighbours_with_parent(parent: Object) -> Array[Triangle]:  # (parent: Region | null)
+	var parented_neighbours: Array[Triangle] = []
+	for neighbour in _neighbours:
+		if neighbour.get_parent() == parent:
+			parented_neighbours.append(neighbour)
+	return parented_neighbours
+
+func count_neighbours_with_parent(parent: Object) -> int:  # (parent: Region | null)
+	return get_neighbours_with_parent(parent).size()
+
+func is_surrounded_by_region(region: Object) -> bool:  # (region: Region | null)
+	for point in _points:
+		if not point.has_polygon_with_parent(region):
+			return false
+	return true
+
+func get_corner_neighbours_with_parent(parent: Object) -> Array[Triangle]:  # (parent: Region | null)
+	var parented_corner_neighbours: Array[Triangle] = []
+	for corner_neighbour in _corner_neighbours:
+		if corner_neighbour.get_parent() == parent:
+			parented_corner_neighbours.append(corner_neighbour)
+	return parented_corner_neighbours
+
+func count_corner_neighbours_with_parent(parent: Object) -> int:  # (parent: Region | null)
+	return get_corner_neighbours_with_parent(parent).size()
+
+# ~~~~~~~~~~~~~~~
+
+#var _is_potential_settlement: bool = false
+#var _roads: Array = []  # Array[TrianglePath]
+#var _junction: bool = false
+#var _cliff_edge: Object = null  # Edge | null
+#var _cliff_point: Object = null  # Vertex | null
+#var _special_debug_edge: Object = null  # Edge | null
+#var _special_debug_point: Object = null  # Vertex | null
+
+
+#func set_cliff_edge(edge: Object) -> void:  # (edge: Edge | null)
+#	_cliff_edge = edge
+#
+#func set_cliff_point(point: Object) -> void:  # (point: Vertex | null)
+#	_cliff_point = point
+
+#func touches_river() -> bool:
+#	for point in _points:
+#		if point.has_river():
+#			return true
+#	return false
+
+#func set_potential_settlement() -> void:
+#	_is_potential_settlement = true
+
+#func add_road(road: Object) -> void:  # (road: TrianglePath)
+#	_roads.append(road)
+
+#func set_junction() -> void:
+#	_junction = true
+
+#func is_junction() -> bool:
+#	return _junction
+
+#func contains_road() -> bool:
+#	return len(_roads) == 0
+
+#func road_crossing() -> bool:
+#	return len(_roads) > 1
+
+#func get_road() -> Array:  # -> Array[TrianglePath]
+#	return _roads
+
+#func is_junction_or_settlement() -> bool:
+#	return _junction or _is_potential_settlement
+
+#func remove_road(road: Object) -> void:  # (road: TrianglePath)
+#	_roads.erase(road)
+
 #func set_special_debug_point(debug_point: Vertex) -> void:
 #	_special_debug_point = debug_point
-#
+
 #func set_special_debug_edge(debug_edge: Edge) -> void:
 #	_special_debug_edge = debug_edge

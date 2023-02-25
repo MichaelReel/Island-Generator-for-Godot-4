@@ -9,12 +9,6 @@ var _connections: Array[Edge] = []
 var _triangles: Array[Triangle] = []
 var _height_set: bool = false
 
-#var _river: Object  # EdgePath | null
-#var _exit_for: Object = null  # Region | null
-#var _is_head: bool = false
-#var _is_mouth: bool = false
-#var _eroded_depth: float = 0.0
-
 func _init(x: float = 0.0, z: float = 0.0) -> void:
 	_pos = Vector3(x, 0.0, z)
 
@@ -26,12 +20,6 @@ func get_connection_to_point(point: Vertex) -> Object:  # --> Edge | null
 
 func has_connection_to_point(point: Vertex) -> bool:
 	return get_connection_to_point(point) != null
-
-#func has_polygon_with_parent(parent: Object) -> bool:  # (parent: Region | null)
-#	for triangle in _triangles:
-#		if triangle.get_parent() == parent:
-#			return true
-#	return false
 
 func height_set() -> bool:
 	return _height_set
@@ -69,13 +57,50 @@ func get_connections() -> Array[Edge]:
 
 func get_connected_points() -> Array[Vertex]:
 	"""Returns a new array each time of the connected points"""
-	var connected_points := []
+	var connected_points: Array[Vertex] = []
 	for con in _connections:
 		connected_points.append(con.other_point(self))
 	return connected_points
 
 func get_triangles() -> Array[Triangle]:
 	return _triangles
+
+func duplicate_to(new_vertex: Vertex) -> Vertex:
+	"""Create a copy of this vertex for splitting parts of the terrain"""
+	new_vertex._pos = _pos
+	new_vertex._connections = _connections.duplicate()
+	new_vertex._triangles = _triangles.duplicate()
+	new_vertex._height_set = _height_set
+	return new_vertex
+
+static func sort_vert_inv_hortz(a: Vertex, b: Vertex) -> bool:
+	"""This will sort by Y desc, then X asc"""
+	if a._pos.y > b._pos.y:
+		return true
+	elif a._pos.y == b._pos.y and a._pos.x < b._pos.x:
+			return true
+	return false
+
+static func sort_height(a: Vertex, b: Vertex) -> bool:
+	return a.get_height() <= b.get_height()
+
+# ~~~~~~~~~~~~~~~
+# Region Data:
+# ~~~~~~~~~~~~~~~
+
+func has_polygon_with_parent(parent: Object) -> bool:  # (parent: Region | null)
+	for triangle in _triangles:
+		if triangle.get_parent() == parent:
+			return true
+	return false
+
+# ~~~~~~~~~~~~~~~
+
+#var _river: Object  # EdgePath | null
+#var _exit_for: Object = null  # Region | null
+#var _is_head: bool = false
+#var _is_mouth: bool = false
+#var _eroded_depth: float = 0.0
 
 #func get_uneroded_vector() -> Vector3:
 #	return get_vector_at_height(_pos.y + _eroded_depth)
@@ -113,22 +138,3 @@ func get_triangles() -> Array[Triangle]:
 #
 #func get_erosion() -> float:
 #	return _eroded_depth
-
-func duplicate_to(new_vertex: Vertex) -> Vertex:
-	"""Create a copy of this vertex for splitting parts of the terrain"""
-	new_vertex._pos = _pos
-	new_vertex._connections = _connections.duplicate()
-	new_vertex._triangles = _triangles.duplicate()
-	new_vertex._height_set = _height_set
-	return new_vertex
-
-static func sort_vert_inv_hortz(a: Vertex, b: Vertex) -> bool:
-	"""This will sort by Y desc, then X asc"""
-	if a._pos.y > b._pos.y:
-		return true
-	elif a._pos.y == b._pos.y and a._pos.x < b._pos.x:
-			return true
-	return false
-
-static func sort_height(a: Vertex, b: Vertex) -> bool:
-	return a.get_height() <= b.get_height()
