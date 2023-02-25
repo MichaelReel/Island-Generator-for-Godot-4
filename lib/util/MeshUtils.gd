@@ -21,12 +21,12 @@ static func get_land_mesh(high_level_terrain: HighLevelTerrain, debug_color_dict
 		for triangle in row:
 			var color_dict: Dictionary = triangle.get_debug_vertex_colors(debug_color_dict)
 			for vertex in triangle.get_vertices():
+				var position: Vector3 = vertex.get_vector()
+				var color: Color = color_dict[vertex]
 				surface_tool.set_color(color_dict[vertex])
 				surface_tool.add_vertex(vertex.get_vector())
 	surface_tool.generate_normals()
-	var island_mesh: Mesh = surface_tool.commit()
-
-	return island_mesh
+	return surface_tool.commit()
 
 #static func get_water_body_meshes(high_level_terrain: HighlevelTerrain) -> Array:  # -> Array[Mesh]
 #	var meshes: Array = []

@@ -1,14 +1,14 @@
-[gd_scene load_steps=8 format=3 uid="uid://cxl6ppg12bdw5"]
+[gd_scene load_steps=8 format=3 uid="uid://cdv2k6kgjvujc"]
 
 [ext_resource type="PackedScene" uid="uid://bh5aiqjtrj2hn" path="res://view/IslandDebugMesh.tscn" id="1_6k65b"]
 [ext_resource type="PackedScene" uid="uid://c0h7ikfpntf4l" path="res://lib/camera/DebugCameraControl.tscn" id="2_45wnh"]
 [ext_resource type="Resource" uid="uid://b1jnfhw6prua2" path="res://lib/util/debug_color_dict.tres" id="2_dh10k"]
 [ext_resource type="Material" uid="uid://cj2ghxula37y0" path="res://materials/debug_terrain_surface.tres" id="2_lml5o"]
-[ext_resource type="Shader" path="res://lib/util/outliner.gdshader" id="4_5sh8r"]
+[ext_resource type="Shader" path="res://materials/outliner.gdshader" id="4_7n31l"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_wddrc"]
 render_priority = 0
-shader = ExtResource("4_5sh8r")
+shader = ExtResource("4_7n31l")
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_bq8t6"]
 material = SubResource("ShaderMaterial_wddrc")

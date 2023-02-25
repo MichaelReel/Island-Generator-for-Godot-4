@@ -51,7 +51,6 @@ func _exit_tree():
 		thread.wait_to_finish()
 
 func _stage_thread() -> void:
-	_update_land_terrain_mesh()
 	high_level_terrain.perform()
 
 func _on_stage_complete(stage: Stage, duration: int) -> void:
