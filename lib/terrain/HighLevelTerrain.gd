@@ -10,7 +10,7 @@ signal stage_complete(stage, duration)
 signal all_stages_complete()
 
 
-var grid: Grid
+var _grid: Grid
 #var _island_stage: IslandStage
 #var _regions_stage: RegionStage
 #var _lake_stage: LakeStage
@@ -35,10 +35,7 @@ func _init(
 ) -> void:
 	var rng = RandomNumberGenerator.new()
 	rng.seed = random_seed
-	print("Starting Base Grid Gen")
-	var time_start: int = Time.get_ticks_msec()
-	grid = Grid.new(edge_length, edges_across, debug_color_map.base_color)
-	print("Grid created in %d msecs" % (Time.get_ticks_msec() - time_start))
+	_grid = Grid.new(edge_length, edges_across, debug_color_map.base_color)
 #	_island_stage = IslandStage.new(grid,  debug_color_map.land_color, land_cell_limit, rng.randi())
 #	_regions_stage = RegionStage.new(_island_stage.get_region(), debug_color_map.region_colors, rng.randi())
 #	_lake_stage = LakeStage.new(_regions_stage, debug_color_map.lake_colors, rng.randi())
@@ -50,6 +47,7 @@ func _init(
 
 func perform() -> void:
 	var stages = [
+		_grid,
 #		_island_stage,
 #		_regions_stage,
 #		_lake_stage,
@@ -66,6 +64,8 @@ func perform() -> void:
 	
 	emit_signal("all_stages_complete")
 
+func get_grid() -> Grid:
+	return _grid
 
 #func get_lakes() -> Array:  # -> Array[Region]
 #	return _lake_stage.get_regions()

@@ -58,6 +58,7 @@ func _on_stage_complete(stage: Stage, duration: int) -> void:
 	print("%s completed in %d msecs" % [stage, duration])
 	var time_start = Time.get_ticks_msec()
 	_update_land_terrain_mesh()
+	
 #	match str(stage):
 #		"River Stage":
 #			_create_water_mesh_instances(_water_material)
@@ -67,6 +68,7 @@ func _on_stage_complete(stage: Stage, duration: int) -> void:
 #			_create_road_sign_debug_meshes(_terrain_material)
 #		"Cliff Stage":
 #			_create_cliff_mesh_instances(_terrain_material)
+
 	print("%s meshed updated in %d msecs" % [stage, (Time.get_ticks_msec() - time_start)])
 
 func _on_all_stages_complete() -> void:

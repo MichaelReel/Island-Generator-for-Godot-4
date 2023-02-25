@@ -1,9 +1,18 @@
-[gd_scene load_steps=5 format=3 uid="uid://cxl6ppg12bdw5"]
+[gd_scene load_steps=8 format=3 uid="uid://cxl6ppg12bdw5"]
 
 [ext_resource type="PackedScene" uid="uid://bh5aiqjtrj2hn" path="res://view/IslandDebugMesh.tscn" id="1_6k65b"]
 [ext_resource type="PackedScene" uid="uid://c0h7ikfpntf4l" path="res://lib/camera/DebugCameraControl.tscn" id="2_45wnh"]
 [ext_resource type="Resource" uid="uid://b1jnfhw6prua2" path="res://lib/util/debug_color_dict.tres" id="2_dh10k"]
 [ext_resource type="Material" uid="uid://cj2ghxula37y0" path="res://materials/debug_terrain_surface.tres" id="2_lml5o"]
+[ext_resource type="Shader" path="res://lib/util/outliner.gdshader" id="4_5sh8r"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_wddrc"]
+render_priority = 0
+shader = ExtResource("4_5sh8r")
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_bq8t6"]
+material = SubResource("ShaderMaterial_wddrc")
+size = Vector2(1000, 1000)
 
 [node name="Main" type="Node3D"]
 
@@ -12,8 +21,11 @@ surface_material_override/0 = ExtResource("2_lml5o")
 stages_in_thread = false
 debug_color_dict = ExtResource("2_dh10k")
 
+[node name="MeshInstance3D" type="MeshInstance3D" parent="IslandDebugMesh"]
+mesh = SubResource("PlaneMesh_bq8t6")
+
 [node name="DebugCameraControl" parent="." instance=ExtResource("2_45wnh")]
-transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 600, 600, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 600, 600)
 
 [node name="CameraMount" parent="DebugCameraControl" index="1"]
 transform = Transform3D(1, 0, 0, 0, 0.573576, 0.819152, 0, -0.819152, 0.573576, 0, 0, 0)

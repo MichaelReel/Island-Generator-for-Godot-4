@@ -82,15 +82,15 @@ func get_edges_on_grid_boundary() -> Array[Edge]:
 			boundary_edges.append(edge)
 	return boundary_edges
 
-func get_color():  # -> Color | null:
+func get_color(default_color: Color):  # -> Color | null:
 #	if _parent:
 #		return _parent.get_color()
-	return null
+	return default_color
 
 func get_vertices() -> Array[Vertex]:
 	return _points
 
-func get_river_vertex_colors(debug_color_dict: DebugColorDict) -> Dictionary:  # Dictionary[Vertex, Color]
+func get_debug_vertex_colors(debug_color_dict: DebugColorDict) -> Dictionary:  # Dictionary[Vertex, Color]
 	"""This is just for creating the development and debug meshes"""
 #	var river_color = debug_color_dict.river_color
 	var null_color = debug_color_dict.base_color
@@ -113,9 +113,7 @@ func get_river_vertex_colors(debug_color_dict: DebugColorDict) -> Dictionary:  #
 #	# 	return point_color_dict
 
 	for point in _points:
-		point_color_dict[point] = get_color()
-		if point_color_dict[point] == null:
-			point_color_dict[point] = null_color
+		point_color_dict[point] = get_color(null_color)
 #		if point.has_river():
 #			point_color_dict[point] = river_color
 #		if point.is_head():

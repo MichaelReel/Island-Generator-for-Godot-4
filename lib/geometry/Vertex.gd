@@ -5,8 +5,8 @@ Vertex data model and tools
 """
 
 var _pos: Vector3
-var _connections: Array[Edge]
-var _triangles: Array[Triangle]
+var _connections: Array[Edge] = []
+var _triangles: Array[Triangle] = []
 var _height_set: bool = false
 
 #var _river: Object  # EdgePath | null
@@ -17,8 +17,6 @@ var _height_set: bool = false
 
 func _init(x: float = 0.0, z: float = 0.0) -> void:
 	_pos = Vector3(x, 0.0, z)
-	_connections = []
-	_triangles = []
 
 func get_connection_to_point(point: Vertex) -> Object:  # --> Edge | null
 	for con in _connections:

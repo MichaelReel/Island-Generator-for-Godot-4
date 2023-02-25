@@ -1,10 +1,14 @@
 class_name Grid
-extends Model
+extends Stage
 """Grid data model and tools"""
 
 var _color: Color
 var _tri_side: float
 var _tri_height: float
+var _points_per_row: int
+var _point_rows: int
+var _tri_rows: int
+var _tri_per_row: int
 var _mesh_center: Vector2
 var _grid_points: Array[Array] = []  # Array[Array[Vertex]]
 var _grid_lines: Array[Edge] = []
@@ -12,29 +16,34 @@ var _grid_tris: Array[Array] = []  # Array[Array[Triangle]]
 var _cell_count: int = 0
 #var _debug_content: String = ""
 
+
+
 func _init(edge_size: float, row_points: int, color: Color) -> void:
-	_tri_side = edge_size
-	_color = color
-	_tri_height = sqrt(0.75) * _tri_side
-	
 	print("Preparing dimensions... %d" % Time.get_ticks_msec())
 	
-	# Find the number of rows to keep the mesh roughly square
-	var row_width: float = (row_points + 0.5) * _tri_side
-	var row_count: int = int(row_width / _tri_height)
-	var half_full_width: float = edge_size * row_points / 2.0
+	_tri_side = edge_size
+	_tri_height = sqrt(0.75) * _tri_side
+	_points_per_row = row_points
+	_color = color
+	var row_width: float = (_points_per_row + 0.5) * _tri_side
+	_point_rows = int(row_width / _tri_height)
+	var half_full_width: float = _tri_side * _points_per_row / 2.0
 	_mesh_center = Vector2(half_full_width, half_full_width)
-	var tri_rows: int = row_count - 1
-	var tri_per_row: int = (row_points - 1) * 2
-	
+	_tri_rows = _point_rows - 1
+	_tri_per_row = (_points_per_row - 1) * 2
+
+func _to_string():
+	return "Grid"
+
+func perform():
 	print("Preparing points... %d" % Time.get_ticks_msec())
 	
 	# Lay out points
-	for row_ind in range(row_count):
+	for row_ind in range(_point_rows):
 		var point_row: Array = []
 		var offset: float = (row_ind % 2) * (_tri_side / 2.0)
 		var z: float = _tri_height * row_ind
-		for col_ind in range(row_points):
+		for col_ind in range(_points_per_row):
 			var x: float = offset + (_tri_side * col_ind)
 			var new_point = Vertex.new(x - _mesh_center.x, z - _mesh_center.y)
 			point_row.append(new_point)
@@ -43,24 +52,24 @@ func _init(edge_size: float, row_points: int, color: Color) -> void:
 	print("Preparing lines... %d" % Time.get_ticks_msec())
 	
 	# Layout and record edges between points
-	for row_ind in range(row_count):
+	for row_ind in range(_point_rows):
 		var parity: int = (row_ind % 2) * 2 - 1  # +1 on odd, -1 on even
-		for col_ind in range(row_points):
+		for col_ind in range(_points_per_row):
 			var point = _grid_points[row_ind][col_ind]
 			if col_ind > 0:
 				_add_grid_line(point, _grid_points[row_ind][col_ind - 1])
 			if row_ind > 0 and col_ind < len(_grid_points[row_ind - 1]):
-				_add_grid_line(point, _grid_points[row_ind - 1][col_ind])
+				_add_grid_line(_grid_points[row_ind - 1][col_ind], point)
 			if row_ind > 0 and col_ind + parity >= 0 and col_ind + parity < len(_grid_points[row_ind - 1]):
-				_add_grid_line(point, _grid_points[row_ind - 1][col_ind + parity])
+				_add_grid_line(_grid_points[row_ind - 1][col_ind + parity], point)
 	
 
 	print("Preparing triangles... %d" % Time.get_ticks_msec())
 	
 	# Go through the points and create triangles
-	for tri_row_ind in range(tri_rows):
+	for tri_row_ind in range(_tri_rows):
 		var tri_row: Array = []
-		for tri_col_ind in range(tri_per_row):
+		for tri_col_ind in range(_tri_per_row):
 			var new_triangle: Triangle = _create_triangle(tri_row_ind, tri_col_ind)
 			tri_row.append(new_triangle)
 		_grid_tris.append(tri_row)
@@ -72,7 +81,7 @@ func _init(edge_size: float, row_points: int, color: Color) -> void:
 		for tri in tri_row:
 			tri.update_neighbours_from_edges()
 	
-	print("Grid initialised! %d" % Time.get_ticks_msec())
+	print("Grid initialised... %d" % Time.get_ticks_msec())
 		
 #	_update_debug_content()
 
@@ -146,8 +155,7 @@ func get_triangle_at(x: float, z: float) -> Object:  # -> Triangle | null
 	return null
 
 func _add_grid_line(a: Vertex, b: Vertex) -> void:
-	var new_line := Edge.new(a, b)
-	_grid_lines.append(new_line)
+	_grid_lines.append(Edge.new(a, b))
 
 func _create_triangle(row: int, col: int) -> Triangle:
 	var row_even: bool = row % 2 == 0
