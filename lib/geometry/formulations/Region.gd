@@ -9,7 +9,7 @@ var _perimeter_points: Array[Vertex] = []
 var _perimeter_lines: Array[Edge] = []
 var _inner_perimeter: Array[Vertex] = []
 var _region_front: Array[Triangle]
-var _exit_point: Vertex
+var _exit_point: Vertex  # Only relevant once the height map sets lake drains
 var _perimeter_height: float = 0.0
 var _perimeter_outlined: bool = false
 var _points_collected: bool = false
@@ -109,11 +109,11 @@ func get_inner_perimeter_points() -> Array[Vertex]:
 
 func has_exit_point() -> bool:
 	return true if _exit_point else false
-	
+
 func set_exit_point(point: Vertex) -> void:
 	_exit_point = point
 	point.set_as_exit_point(self)
-	
+
 func get_exit_point() -> Vertex:
 	return _exit_point
 

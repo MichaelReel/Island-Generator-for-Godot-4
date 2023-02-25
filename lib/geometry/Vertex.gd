@@ -95,9 +95,23 @@ func has_polygon_with_parent(parent: Object) -> bool:  # (parent: Region | null)
 	return false
 
 # ~~~~~~~~~~~~~~~
+# Lake Data:
+# ~~~~~~~~~~~~~~~
+
+var _exit_for: Object = null  # Region | null
+
+func set_as_exit_point(lake: Object) -> void:  # (lake: Region | null)
+	_exit_for = lake
+
+func is_exit() -> bool:
+	return true if _exit_for else false
+
+func get_exit_for() -> Object:  # Region | null
+	return _exit_for
+
+# ~~~~~~~~~~~~~~~
 
 #var _river: Object  # EdgePath | null
-#var _exit_for: Object = null  # Region | null
 #var _is_head: bool = false
 #var _is_mouth: bool = false
 #var _eroded_depth: float = 0.0
@@ -111,14 +125,7 @@ func has_polygon_with_parent(parent: Object) -> bool:  # (parent: Region | null)
 #func has_river() -> bool:
 #	return true if _river else false
 #
-#func set_as_exit_point(lake: Object) -> void:  # (lake: Region | null)
-#	_exit_for = lake
-#
-#func is_exit() -> bool:
-#	return true if _exit_for else false
-#
-#func get_exit_for() -> Object:  # Region | null
-#	return _exit_for
+
 #
 #func set_as_head() -> void:
 #	_is_head = true

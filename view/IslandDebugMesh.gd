@@ -58,9 +58,10 @@ func _on_stage_complete(stage: Stage, duration: int) -> void:
 	var time_start = Time.get_ticks_msec()
 	_update_land_terrain_mesh()
 	
-#	match str(stage):
+	match str(stage):
+		"Height Stage":
+			_create_water_mesh_instances(_water_material)
 #		"River Stage":
-#			_create_water_mesh_instances(_water_material)
 #			_create_river_mesh_instances(_water_material)
 #		"Civil Stage":
 #			_create_road_mesh_instances(_terrain_material)
@@ -77,9 +78,9 @@ func _update_land_terrain_mesh() -> void:
 	var island_mesh: Mesh = MeshUtils.get_land_mesh(high_level_terrain, debug_color_dict)
 	set_mesh(island_mesh)
 
-#func _create_water_mesh_instances(water_material: Material) -> void:
-#	_insert_meshes(MeshUtils.get_water_body_meshes(high_level_terrain), water_material)
-#
+func _create_water_mesh_instances(water_material: Material) -> void:
+	_insert_meshes(MeshUtils.get_water_body_meshes(high_level_terrain), water_material)
+
 #func _create_river_mesh_instances(water_material: Material) -> void:
 #	_insert_meshes(MeshUtils.get_river_surface_meshes(high_level_terrain), water_material)
 #
@@ -91,11 +92,10 @@ func _update_land_terrain_mesh() -> void:
 #
 #func _create_cliff_mesh_instances(terrain_material: Material) -> void:
 #	_insert_meshes(MeshUtils.get_cliff_surface_meshes(high_level_terrain, debug_color_dict), terrain_material)
-#
-#func _insert_meshes(meshes: Array, material: Material) -> void:  # Array[Mesh]
-#	for in_mesh in meshes:
-#		var mesh_instance: MeshInstance = MeshInstance.new()
-#		mesh_instance.mesh = in_mesh
-#		mesh_instance.set_surface_material(0, material)
-#		add_child(mesh_instance)
-		
+
+func _insert_meshes(meshes: Array[Mesh], material: Material) -> void:
+	for in_mesh in meshes:
+		var mesh_instance: MeshInstance3D = MeshInstance3D.new()
+		mesh_instance.mesh = in_mesh
+		mesh_instance.set_surface_override_material(0, material)
+		add_child(mesh_instance)
