@@ -85,22 +85,22 @@ func perform():
 		
 #	_update_debug_content()
 
-func get_point_rows() -> Array:  # Array[Array[Vertex]]
+func get_point_rows() -> Array[Array]:  # Array[Array[Vertex]]
 	"""Returns the array of rows of points"""
 	return _grid_points
 
 func get_cell_count() -> int:
 	return _cell_count
 
-func get_island_points() -> Array:  # Array[Vertex]
-	var point_list: Array = []
+func get_island_points() -> Array[Vertex]:
+	var point_list: Array[Vertex] = []
 	for row in _grid_points:
 		for point in row:
 			if _point_is_not_sea(point):
 				point_list.append(point)
 	return point_list
 
-func get_triangles() -> Array:  # Array[Array[Triangles]]
+func get_triangles() -> Array[Array]:  # Array[Array[Triangles]]
 	"""Returns array of arrays of triangles in a grid layout"""
 	return _grid_tris
 

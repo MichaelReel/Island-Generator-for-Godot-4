@@ -15,7 +15,7 @@ var _island_stage: IslandStage
 var _regions_stage: RegionStage
 var _lake_stage: LakeStage
 var _height_stage: HeightStage
-#var _river_stage: RiverStage
+var _river_stage: RiverStage
 #var _civil_stage: CivilStage
 #var _cliff_stage: CliffStage
 
@@ -41,9 +41,9 @@ func _init(
 	_regions_stage = RegionStage.new(_island_stage.get_region(), debug_color_map.region_colors, rng.randi())
 	_lake_stage = LakeStage.new(_regions_stage, debug_color_map.lake_colors, rng.randi())
 	_height_stage = HeightStage.new(_island_stage.get_region(), _lake_stage, diff_height, diff_max_multi, rng.randi())
-#	_river_stage = RiverStage.new(grid, _lake_stage, river_count, debug_color_map.river_color, erode_depth, rng.randi())
-#	_civil_stage = CivilStage.new(grid, _lake_stage, slope_penalty, river_penalty)
-#	_cliff_stage = CliffStage.new(grid, _lake_stage, debug_color_map.cliff_color, cliff_min_slope)
+	_river_stage = RiverStage.new(_grid, _lake_stage, river_count, erode_depth, rng.randi())
+#	_civil_stage = CivilStage.new(_grid, _lake_stage, slope_penalty, river_penalty)
+#	_cliff_stage = CliffStage.new(_grid, _lake_stage, debug_color_map.cliff_color, cliff_min_slope)
 
 
 func perform() -> void:
@@ -52,7 +52,7 @@ func perform() -> void:
 		_regions_stage,
 		_lake_stage,
 		_height_stage,
-#		_river_stage,
+		_river_stage,
 #		_civil_stage,
 #		_cliff_stage,
 	]
@@ -67,17 +67,17 @@ func perform() -> void:
 func get_grid() -> Grid:
 	return _grid
 
-func get_lakes() -> Array:  # -> Array[Region]
+func get_lakes() -> Array[Region]:
 	return _lake_stage.get_regions()
 
-#func get_rivers() -> Array:  # -> Array[EdgePath]
-#	return _river_stage.get_rivers()
-#
-#func get_road_paths() -> Array:  # -> Array[TrianglePaths]
+func get_rivers() -> Array[EdgePath]:
+	return _river_stage.get_rivers()
+
+#func get_road_paths() -> Array[TrianglePaths]:
 #	return _civil_stage.get_road_paths()
-#
-#func get_road_junctions() -> Array:  # -> Array[Triangle]
+
+#func get_road_junctions() -> Array[Triangle]:
 #	return _civil_stage.get_junctions()
-#
-#func get_cliff_surfaces() -> Array:  # -> Array[Array[Triangle]]
+
+#func get_cliff_surfaces() -> Array[Array]:  # -> Array[Array[Triangle]]
 #	return _cliff_stage.get_cliff_surfaces()

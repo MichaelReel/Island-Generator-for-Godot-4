@@ -110,38 +110,40 @@ func get_exit_for() -> Object:  # Region | null
 	return _exit_for
 
 # ~~~~~~~~~~~~~~~
+# River Data:
+# ~~~~~~~~~~~~~~~
 
-#var _river: Object  # EdgePath | null
-#var _is_head: bool = false
-#var _is_mouth: bool = false
-#var _eroded_depth: float = 0.0
+var _river: Object  # EdgePath | null
+var _is_head: bool = false
+var _is_mouth: bool = false
+var _eroded_depth: float = 0.0
 
-#func get_uneroded_vector() -> Vector3:
-#	return get_vector_at_height(_pos.y + _eroded_depth)
-#
-#func set_river(river: Object) -> void:  # (river: EdgePath | null)
-#	_river = river
-#
-#func has_river() -> bool:
-#	return true if _river else false
-#
+func get_uneroded_vector() -> Vector3:
+	return get_vector_at_height(_pos.y + _eroded_depth)
 
-#
-#func set_as_head() -> void:
-#	_is_head = true
-#
-#func is_head() -> bool:
-#	return _is_head
-#
-#func set_as_mouth() -> void:
-#	_is_mouth = true
-#
-#func is_mouth() -> bool:
-#	return _is_mouth
-#
-#func erode(erode_depth: float) -> void:
-#	_eroded_depth += erode_depth
-#	_pos.y -= erode_depth
-#
-#func get_erosion() -> float:
-#	return _eroded_depth
+func set_river(river: Object) -> void:  # (river: EdgePath | null)
+	_river = river
+
+func has_river() -> bool:
+	return true if _river else false
+
+func set_as_head() -> void:
+	_is_head = true
+
+func is_head() -> bool:
+	return _is_head
+
+func set_as_mouth() -> void:
+	_is_mouth = true
+
+func is_mouth() -> bool:
+	return _is_mouth
+
+func erode(erode_depth: float) -> void:
+	_eroded_depth += erode_depth
+	_pos.y -= erode_depth
+
+func get_erosion() -> float:
+	return _eroded_depth
+
+# ~~~~~~~~~~~~~~~

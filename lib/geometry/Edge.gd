@@ -5,7 +5,6 @@ extends Model
 var _a: Vertex
 var _b: Vertex
 var _borders: Array[Triangle] = []
-#var _river: Object = null  # EdgePath | null
 
 func _init(a: Vertex, b: Vertex) -> void:
 	if Vertex.sort_vert_inv_hortz(a, b):
@@ -63,16 +62,24 @@ func remove_border_of(triangle: Triangle) -> void:
 func lowest_end_point() -> Vertex:
 	return _a if _a.get_height() < _b.get_height() else _b
 
-#func set_river(river: Object) -> void:  # (river: EdgePath | null)
-#	_river = river
-#	_a.set_river(river)
-#	_b.set_river(river)
-#
-#func has_river() -> bool:
-#	return true if _river else false
-
 func get_center() -> Vector3:
 	return lerp(_a.get_vector(), _b.get_vector(), 0.5)
 
 func get_height_diff() -> float:
 	return abs(_a.get_height() - _b.get_height())
+
+# ~~~~~~~~~~~~~~~
+# River Data:
+# ~~~~~~~~~~~~~~~
+
+var _river: Object = null  # EdgePath | null
+
+func set_river(river: Object) -> void:  # (river: EdgePath | null)
+	_river = river
+	_a.set_river(river)
+	_b.set_river(river)
+
+func has_river() -> bool:
+	return true if _river else false
+
+# ~~~~~~~~~~~~~~~

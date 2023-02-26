@@ -134,7 +134,7 @@ func get_height_diff() -> float:
 
 func get_lowest_edge() -> Edge:
 	var points = _points.duplicate()
-	points.sort_custom(sort_height) # BUG: Should use Vertex.sort_height
+	points.sort_custom(sort_height) # BUG: Cannot find member "sort_height" in base "Vertex".
 	return points[0].get_connection_to_point(points[1])
 
 # Copied from Vertex to get around bug, for now or until I figure the real issue

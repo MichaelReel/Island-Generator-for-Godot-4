@@ -24,12 +24,12 @@ static func get_water_body_meshes(high_level_terrain: HighLevelTerrain) -> Array
 	meshes.append(_get_sea_level_mesh(high_level_terrain.get_grid()))
 	return meshes
 
-#static func get_river_surface_meshes(high_level_terrain: HighLevelTerrain) -> Array:  # -> Array[Mesh]
-#	var meshes: Array = []
-#	for river in high_level_terrain.get_rivers():
-#		meshes.append(_get_river_surface_mesh(river, high_level_terrain._lake_stage))
-#	return meshes
-#
+static func get_river_surface_meshes(high_level_terrain: HighLevelTerrain) -> Array[Mesh]:
+	var meshes: Array[Mesh] = []
+	for river in high_level_terrain.get_rivers():
+		meshes.append(_get_river_surface_mesh(river, high_level_terrain._lake_stage))
+	return meshes
+
 #static func get_all_road_surface_meshes(
 #	high_level_terrain: HighLevelTerrain,
 #	debug_color_dict: DebugColorDict,
@@ -87,26 +87,24 @@ static func _get_sea_level_mesh(grid: Grid) -> Mesh:
 	surface_tool.generate_normals()
 	return surface_tool.commit()
 
-#static func _get_river_surface_mesh(river: EdgePath, lake_stage: LakeStage) -> Mesh:
-#	var ratio = 0.75
-#	var surface_tool: SurfaceTool = SurfaceTool.new()
-#	var river_mesh: Mesh = Mesh.new()
-#	var drop_depth = Vector3.DOWN * river.get_eroded_depth() * ratio
-#
-#	surface_tool.begin(Mesh.PRIMITIVE_TRIANGLES)
-#
-#	for triangle in river.get_adjacent_triangles():
-#		for vertex in triangle.get_vertices():
-#			if lake_stage.point_in_water_body(vertex):
-#				surface_tool.add_vertex(vertex.get_uneroded_vector())
-#			else:
-#				surface_tool.add_vertex(vertex.get_uneroded_vector() + drop_depth)
-#
-#	surface_tool.generate_normals()
-#	var _err = surface_tool.commit(river_mesh)
-#
-#	return river_mesh
-#
+static func _get_river_surface_mesh(river: EdgePath, lake_stage: LakeStage) -> Mesh:
+	var ratio = 0.75
+	var surface_tool: SurfaceTool = SurfaceTool.new()
+	var river_mesh: Mesh = Mesh.new()
+	var drop_depth = Vector3.DOWN * river.get_eroded_depth() * ratio
+
+	surface_tool.begin(Mesh.PRIMITIVE_TRIANGLES)
+
+	for triangle in river.get_adjacent_triangles():
+		for vertex in triangle.get_vertices():
+			if lake_stage.point_in_water_body(vertex):
+				surface_tool.add_vertex(vertex.get_uneroded_vector())
+			else:
+				surface_tool.add_vertex(vertex.get_uneroded_vector() + drop_depth)
+
+	surface_tool.generate_normals()
+	return surface_tool.commit()
+
 #static func _get_road_surface_mesh_for_path(road_path: TrianglePath, debug_color_dict: DebugColorDict, width: float, clearance: float) -> Mesh:
 #	var surface_tool: SurfaceTool = SurfaceTool.new()
 #	var road_mesh: Mesh = Mesh.new()
