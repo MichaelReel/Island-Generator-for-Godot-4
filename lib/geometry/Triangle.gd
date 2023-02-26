@@ -48,35 +48,17 @@ func get_vertices() -> Array[Vertex]:
 
 func get_debug_vertex_colors(debug_color_dict: DebugColorDict) -> Dictionary:  # Dictionary[Vertex, Color]
 	"""This is just for creating the development and debug meshes"""
-#	var river_color = debug_color_dict.river_color
-	var null_color = debug_color_dict.base_color
-#	var head_color = debug_color_dict.head_color
-#	var mouth_color = debug_color_dict.mouth_color
-#	var settlement_color = debug_color_dict.settlement_color
-##	var road_cell_color = debug_color_dict.road_cell_color
 #	var cliff_color = debug_color_dict.cliff_color
 #	var special_debug_color = debug_color_dict.special_debug_color
 	var point_color_dict := {}
-#
-#	if _is_potential_settlement:
-#		for point in _points:
-#			point_color_dict[point] = settlement_color
-#		return point_color_dict
-#
-#	# if contains_road():
-#	# 	for point in _points:
-#	# 		point_color_dict[point] = road_cell_color
-#	# 	return point_color_dict
 
 	for point in _points:
-		point_color_dict[point] = get_parent_color(null_color)
-#		if point.has_river():
-#			point_color_dict[point] = river_color
-#		if point.is_head():
-#			point_color_dict[point] = head_color
-#		if point.is_mouth():
-#			point_color_dict[point] = mouth_color
-#
+		point_color_dict[point] = debug_color_dict.base_color
+		point_color_dict[point] = get_parent_color(point_color_dict[point])
+		point_color_dict[point] = get_river_color(point, point_color_dict[point], debug_color_dict)
+		point_color_dict[point] = get_road_color(point_color_dict[point], debug_color_dict)
+		point_color_dict[point] = get_settlement_color(point_color_dict[point], debug_color_dict)
+
 #	if _cliff_edge:
 #		for point in _cliff_edge.get_points():
 #			point_color_dict[point] = cliff_color
@@ -96,10 +78,16 @@ func get_debug_vertex_colors(debug_color_dict: DebugColorDict) -> Dictionary:  #
 func get_edges() -> Array[Edge]:
 	return _edges
 
-func get_shared_edge(triangle: Triangle) -> Object:  # -> Edge | null
+func get_shared_edge(triangle: Triangle) -> Edge:
+	"""
+	Get the edge between this and the other triangle
+	A lack of a shared edge is really an error
+	"""
 	for edge in _edges:
 		if edge.other_triangle(self) == triangle:
 			return edge
+	
+	printerr("Triangles do not share an edge")
 	return null
 
 func get_neighbours() -> Array[Triangle]:  # -> Array[Triangle]
@@ -194,7 +182,6 @@ func replace_existing_point_with(existing: Vertex, replacement: Vertex) -> void:
 	existing.remove_polygon(self)
 	replacement.add_polygon(self)
 
-
 # ~~~~~~~~~~~~~~~
 # Region Data:
 # ~~~~~~~~~~~~~~~
@@ -247,10 +234,66 @@ func count_corner_neighbours_with_parent(parent: Object) -> int:  # (parent: Reg
 	return get_corner_neighbours_with_parent(parent).size()
 
 # ~~~~~~~~~~~~~~~
+# River Data:
+# ~~~~~~~~~~~~~~~
 
-#var _is_potential_settlement: bool = false
-#var _roads: Array = []  # Array[TrianglePath]
-#var _junction: bool = false
+func get_river_color(point: Vertex, default_color: Color, debug_color_dict: DebugColorDict) -> Color:
+	var river_color: Color = default_color
+	if point.has_river():
+		river_color = debug_color_dict.river_color
+	if point.is_head():
+		river_color = debug_color_dict.head_color
+	if point.is_mouth():
+		river_color = debug_color_dict.mouth_color
+	return river_color
+
+# ~~~~~~~~~~~~~~~
+# Civil Data:
+# ~~~~~~~~~~~~~~~
+
+var _is_potential_settlement: bool = false
+var _roads: Array[TrianglePath] = []
+var _junction: bool = false
+
+func set_potential_settlement() -> void:
+	_is_potential_settlement = true
+
+func add_road(road: TrianglePath) -> void:
+	_roads.append(road)
+
+func set_junction() -> void:
+	_junction = true
+
+func is_junction() -> bool:
+	return _junction
+
+func contains_road() -> bool:
+	return len(_roads) == 0
+
+func road_crossing() -> bool:
+	return len(_roads) > 1
+
+func get_road() -> Array[TrianglePath]:
+	return _roads
+
+func is_junction_or_settlement() -> bool:
+	return _junction or _is_potential_settlement
+
+func remove_road(road: TrianglePath) -> void:
+	_roads.erase(road)
+
+func get_settlement_color(default_color: Color, debug_color_dict: DebugColorDict) -> Color:
+	if _is_potential_settlement:
+		return debug_color_dict.settlement_color
+	return default_color
+
+func get_road_color(default_color: Color, debug_color_dict: DebugColorDict):
+	if contains_road():
+		return debug_color_dict.road_cell_color
+	return default_color
+
+# ~~~~~~~~~~~~~~~
+
 #var _cliff_edge: Object = null  # Edge | null
 #var _cliff_point: Object = null  # Vertex | null
 #var _special_debug_edge: Object = null  # Edge | null
@@ -268,33 +311,6 @@ func count_corner_neighbours_with_parent(parent: Object) -> int:  # (parent: Reg
 #		if point.has_river():
 #			return true
 #	return false
-
-#func set_potential_settlement() -> void:
-#	_is_potential_settlement = true
-
-#func add_road(road: Object) -> void:  # (road: TrianglePath)
-#	_roads.append(road)
-
-#func set_junction() -> void:
-#	_junction = true
-
-#func is_junction() -> bool:
-#	return _junction
-
-#func contains_road() -> bool:
-#	return len(_roads) == 0
-
-#func road_crossing() -> bool:
-#	return len(_roads) > 1
-
-#func get_road() -> Array:  # -> Array[TrianglePath]
-#	return _roads
-
-#func is_junction_or_settlement() -> bool:
-#	return _junction or _is_potential_settlement
-
-#func remove_road(road: Object) -> void:  # (road: TrianglePath)
-#	_roads.erase(road)
 
 #func set_special_debug_point(debug_point: Vertex) -> void:
 #	_special_debug_point = debug_point

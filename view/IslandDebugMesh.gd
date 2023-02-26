@@ -63,9 +63,9 @@ func _on_stage_complete(stage: Stage, duration: int) -> void:
 			_create_water_mesh_instances(_water_material)
 		"River Stage":
 			_create_river_mesh_instances(_water_material)
-#		"Civil Stage":
-#			_create_road_mesh_instances(_terrain_material)
-#			_create_road_sign_debug_meshes(_terrain_material)
+		"Civil Stage":
+			_create_road_mesh_instances(_terrain_material)
+			_create_road_sign_debug_meshes(_terrain_material)
 #		"Cliff Stage":
 #			_create_cliff_mesh_instances(_terrain_material)
 
@@ -84,11 +84,11 @@ func _create_water_mesh_instances(water_material: Material) -> void:
 func _create_river_mesh_instances(water_material: Material) -> void:
 	_insert_meshes(MeshUtils.get_river_surface_meshes(high_level_terrain), water_material)
 
-#func _create_road_mesh_instances(terrain_material: Material) -> void:
-#	_insert_meshes(MeshUtils.get_all_road_surface_meshes(high_level_terrain, debug_color_dict), terrain_material)
+func _create_road_mesh_instances(terrain_material: Material) -> void:
+	_insert_meshes(MeshUtils.get_all_road_surface_meshes(high_level_terrain, debug_color_dict), terrain_material)
 
-#func _create_road_sign_debug_meshes(terrain_material: Material) -> void:
-#	_insert_meshes(MeshUtils.get_road_sign_debug_meshes(high_level_terrain, debug_color_dict), terrain_material)
+func _create_road_sign_debug_meshes(terrain_material: Material) -> void:
+	_insert_meshes(MeshUtils.get_road_sign_debug_meshes(high_level_terrain, debug_color_dict), terrain_material)
 
 #func _create_cliff_mesh_instances(terrain_material: Material) -> void:
 #	_insert_meshes(MeshUtils.get_cliff_surface_meshes(high_level_terrain, debug_color_dict), terrain_material)

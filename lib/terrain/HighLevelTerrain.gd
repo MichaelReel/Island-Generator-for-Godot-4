@@ -16,7 +16,7 @@ var _regions_stage: RegionStage
 var _lake_stage: LakeStage
 var _height_stage: HeightStage
 var _river_stage: RiverStage
-#var _civil_stage: CivilStage
+var _civil_stage: CivilStage
 #var _cliff_stage: CliffStage
 
 func _init(
@@ -42,7 +42,7 @@ func _init(
 	_lake_stage = LakeStage.new(_regions_stage, debug_color_map.lake_colors, rng.randi())
 	_height_stage = HeightStage.new(_island_stage.get_region(), _lake_stage, diff_height, diff_max_multi, rng.randi())
 	_river_stage = RiverStage.new(_grid, _lake_stage, river_count, erode_depth, rng.randi())
-#	_civil_stage = CivilStage.new(_grid, _lake_stage, slope_penalty, river_penalty)
+	_civil_stage = CivilStage.new(_grid, _lake_stage, slope_penalty, river_penalty)
 #	_cliff_stage = CliffStage.new(_grid, _lake_stage, debug_color_map.cliff_color, cliff_min_slope)
 
 
@@ -53,7 +53,7 @@ func perform() -> void:
 		_lake_stage,
 		_height_stage,
 		_river_stage,
-#		_civil_stage,
+		_civil_stage,
 #		_cliff_stage,
 	]
 	
@@ -73,11 +73,11 @@ func get_lakes() -> Array[Region]:
 func get_rivers() -> Array[EdgePath]:
 	return _river_stage.get_rivers()
 
-#func get_road_paths() -> Array[TrianglePaths]:
-#	return _civil_stage.get_road_paths()
+func get_road_paths() -> Array[TrianglePath]:
+	return _civil_stage.get_road_paths()
 
-#func get_road_junctions() -> Array[Triangle]:
-#	return _civil_stage.get_junctions()
+func get_road_junctions() -> Array[Triangle]:
+	return _civil_stage.get_junctions()
 
 #func get_cliff_surfaces() -> Array[Array]:  # -> Array[Array[Triangle]]
 #	return _cliff_stage.get_cliff_surfaces()

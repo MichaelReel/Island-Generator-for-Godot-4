@@ -343,7 +343,18 @@ The Civil stage will mark every potential settlement locations that:
 
 The process to create the roads between settlements requires a bit more effort.
 
-- To be Described
+- Each settlement is assigned a road weight of zero.
+- Outwards from each settlement, each search cell is given:
+  - A direction to the nearest settlement.
+  - A weight of effort to get to that settlement, things that affect the weight are:
+    - Distance in cells.
+    - Slope of cells.
+    - Passage over rivers.
+  - Cells that pass inside water bodies are not considered.
+  - Cells may be re-weighed if they can be given a more favourable weight.
+- When each valid search cell has been given a weight, find the best paths between settlements:
+  - The middle is where the 2 lowest weighted cells from the opposites cells meet.
+  - Paths are exended from the middle until they meet the settlements
 
 ### Exagerating Cliff Features
 
