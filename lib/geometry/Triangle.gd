@@ -48,7 +48,6 @@ func get_vertices() -> Array[Vertex]:
 
 func get_debug_vertex_colors(debug_color_dict: DebugColorDict) -> Dictionary:  # Dictionary[Vertex, Color]
 	"""This is just for creating the development and debug meshes"""
-#	var cliff_color = debug_color_dict.cliff_color
 #	var special_debug_color = debug_color_dict.special_debug_color
 	var point_color_dict := {}
 
@@ -58,14 +57,8 @@ func get_debug_vertex_colors(debug_color_dict: DebugColorDict) -> Dictionary:  #
 		point_color_dict[point] = get_river_color(point, point_color_dict[point], debug_color_dict)
 		point_color_dict[point] = get_road_color(point_color_dict[point], debug_color_dict)
 		point_color_dict[point] = get_settlement_color(point_color_dict[point], debug_color_dict)
+		point_color_dict[point] = get_cliff_color(point, point_color_dict[point], debug_color_dict)
 
-#	if _cliff_edge:
-#		for point in _cliff_edge.get_points():
-#			point_color_dict[point] = cliff_color
-#
-#	if _cliff_point:
-#		point_color_dict[_cliff_point] = cliff_color
-#
 #	if _special_debug_edge:
 #		for point in _special_debug_edge.get_points():
 #			point_color_dict[point] = special_debug_color
@@ -268,7 +261,7 @@ func is_junction() -> bool:
 	return _junction
 
 func contains_road() -> bool:
-	return len(_roads) == 0
+	return not _roads.is_empty()
 
 func road_crossing() -> bool:
 	return len(_roads) > 1
@@ -293,24 +286,40 @@ func get_road_color(default_color: Color, debug_color_dict: DebugColorDict):
 	return default_color
 
 # ~~~~~~~~~~~~~~~
+# Cliff Data:
+# ~~~~~~~~~~~~~~~
 
-#var _cliff_edge: Object = null  # Edge | null
-#var _cliff_point: Object = null  # Vertex | null
+var _cliff_edge: Object = null  # Edge | null
+var _cliff_point: Object = null  # Vertex | null
+
+func set_cliff_edge(edge: Object) -> void:  # (edge: Edge | null)
+	_cliff_edge = edge
+
+func set_cliff_point(point: Object) -> void:  # (point: Vertex | null)
+	_cliff_point = point
+
+func touches_river() -> bool:
+	for point in _points:
+		if point.has_river():
+			return true
+	return false
+
+func get_cliff_color(point: Vertex, default_color: Color, debug_color_dict: DebugColorDict) -> Color:
+	var cliff_color = debug_color_dict.cliff_color
+	
+	if _cliff_edge:
+		if point in _cliff_edge.get_points():
+			return cliff_color
+	
+	if _cliff_point == point:
+		return cliff_color
+	
+	return default_color
+
+# ~~~~~~~~~~~~~~~
+
 #var _special_debug_edge: Object = null  # Edge | null
 #var _special_debug_point: Object = null  # Vertex | null
-
-
-#func set_cliff_edge(edge: Object) -> void:  # (edge: Edge | null)
-#	_cliff_edge = edge
-#
-#func set_cliff_point(point: Object) -> void:  # (point: Vertex | null)
-#	_cliff_point = point
-
-#func touches_river() -> bool:
-#	for point in _points:
-#		if point.has_river():
-#			return true
-#	return false
 
 #func set_special_debug_point(debug_point: Vertex) -> void:
 #	_special_debug_point = debug_point

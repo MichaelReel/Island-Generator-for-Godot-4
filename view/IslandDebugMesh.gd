@@ -1,6 +1,6 @@
 extends MeshInstance3D
 
-@export var random_seed: int = -6398989897141750821 + 3
+@export var random_seed: int = -6398989897141750784
 @export var stages_in_thread: bool = true
 @export var debug_color_dict: Resource
 @export_category("Grid Size")
@@ -66,8 +66,8 @@ func _on_stage_complete(stage: Stage, duration: int) -> void:
 		"Civil Stage":
 			_create_road_mesh_instances(_terrain_material)
 			_create_road_sign_debug_meshes(_terrain_material)
-#		"Cliff Stage":
-#			_create_cliff_mesh_instances(_terrain_material)
+		"Cliff Stage":
+			_create_cliff_mesh_instances(_terrain_material)
 
 	print("%s meshed updated in %d msecs" % [stage, (Time.get_ticks_msec() - time_start)])
 
@@ -90,8 +90,8 @@ func _create_road_mesh_instances(terrain_material: Material) -> void:
 func _create_road_sign_debug_meshes(terrain_material: Material) -> void:
 	_insert_meshes(MeshUtils.get_road_sign_debug_meshes(high_level_terrain, debug_color_dict), terrain_material)
 
-#func _create_cliff_mesh_instances(terrain_material: Material) -> void:
-#	_insert_meshes(MeshUtils.get_cliff_surface_meshes(high_level_terrain, debug_color_dict), terrain_material)
+func _create_cliff_mesh_instances(terrain_material: Material) -> void:
+	_insert_meshes(MeshUtils.get_cliff_surface_meshes(high_level_terrain, debug_color_dict), terrain_material)
 
 func _insert_meshes(meshes: Array[Mesh], material: Material) -> void:
 	for in_mesh in meshes:
