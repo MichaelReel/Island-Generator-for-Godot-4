@@ -34,4 +34,3 @@ func get_destination() -> SearchCell:
 	elif _destination != null:
 		return _destination
 	return _path_to_nearest.get_destination()
-
