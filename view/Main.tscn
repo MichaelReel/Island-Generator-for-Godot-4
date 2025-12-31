@@ -4,7 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://c0h7ikfpntf4l" path="res://lib/camera/DebugCameraControl.tscn" id="2_45wnh"]
 [ext_resource type="Resource" uid="uid://b1jnfhw6prua2" path="res://lib/util/debug_color_dict.tres" id="2_dh10k"]
 [ext_resource type="Material" uid="uid://cj2ghxula37y0" path="res://materials/debug_terrain_surface.tres" id="2_lml5o"]
-[ext_resource type="Shader" path="res://materials/outliner.gdshader" id="4_7n31l"]
+[ext_resource type="Shader" uid="uid://crnrugb32x4y7" path="res://materials/outliner.gdshader" id="4_7n31l"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_wddrc"]
 render_priority = 0

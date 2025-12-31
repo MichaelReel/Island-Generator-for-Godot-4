@@ -120,8 +120,8 @@ func _path_from_every_settlement() -> void:
 				# update it if cost is cheaper, and re-insert to propagate
 				if neighbour_search_cell.get_cost() > journey_cost:
 					neighbour_search_cell.update_path(journey_cost, search_cell)
-					var ind = search_front.bsearch_custom(neighbour_search_cell, _sort_by_cost)
-					search_front.insert(ind, neighbour_search_cell)
+					var existing_ind = search_front.bsearch_custom(neighbour_search_cell, _sort_by_cost)
+					search_front.insert(existing_ind, neighbour_search_cell)
 				continue
 
 			# Insert a new search cell into the queue, sorted by journey cost

@@ -242,14 +242,14 @@ func _get_cliff_polygons_for_vertices(top_a: Vertex, top_b: Vertex, bottom_a: Ve
 	"""Create and return the polygons required to fill this section of cliff"""
 	# When the first or last points match, we only need a single triangle
 	if top_a == bottom_a:
-		var _conn_a = Edge.new(top_b, bottom_b)
+		Edge.new(top_b, bottom_b)
 		return [Triangle.new([top_a, top_b, bottom_b])]
 	
 	if top_b == bottom_b:
 		return [Triangle.new([top_a, top_b, bottom_a])]
 	
-	var _conn_a = Edge.new(top_b, bottom_b)
-	var _conn_b = Edge.new(top_b, bottom_a)
+	Edge.new(top_b, bottom_b)
+	Edge.new(top_b, bottom_a)
 	return [
 		Triangle.new([top_a, top_b, bottom_a]),
 		Triangle.new([top_b, bottom_b, bottom_a])
